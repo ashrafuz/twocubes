@@ -6,7 +6,7 @@ using UnityEngine;
 public struct Vertex {
     public Vector2 points;
     public Vector2 normals;
-    [HideInInspector] public float onlyUs; /// uvs, but like v : happy face
+    [HideInInspector] public float onlyUs;
 }
 
 [CreateAssetMenu]

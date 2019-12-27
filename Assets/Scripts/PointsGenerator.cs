@@ -19,19 +19,9 @@ public class PointsGenerator : MonoBehaviour {
         float currentFrequency = m_Frequency;
         for (int i = 0; i < m_StepValue; i++) {
             Gizmos.color = Color.grey;
-
             float t = i / (float) m_StepValue;
             float x = m_Distance * t;
             float y = currentAmplitude * Mathf.Sin (currentFrequency * x);
-
-            // if (y >= (m_WaveAmplitude * 0.95f)) { //close to peak value
-            //     Gizmos.color = Color.red;
-            //     Gizmos.DrawSphere (new Vector3(0,y,x), 0.25f);
-            //     Gizmos.color = Color.grey;
-
-            //     currentAmplitude += Random.Range(0.001f, 0.1f);
-            //     currentFrequency += Random.Range(0.001f, 0.1f);
-            // }
 
             m_PointsAlongPath.Add (new Vector3 (0, y, x));
 
