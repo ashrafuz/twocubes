@@ -41,4 +41,8 @@ public class PointsGenerator : MonoBehaviour {
         }
     }
 
+    public List<Vector3> GetPoints(){
+        return m_PointsAlongPath;
+    }
+
 }
