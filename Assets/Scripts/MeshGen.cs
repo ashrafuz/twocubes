@@ -18,10 +18,18 @@ public class MeshGen : MonoBehaviour {
     [Space][Header ("Mesh Data")]
 
     [SerializeField][Range (8, 128)] int m_FaceDetailLevel = 8;
-    [SerializeField] float m_Radius = 5;
 
     private Mesh m_Mesh;
     private DataAsset m_MeshData;
+
+    public List<Vector3> GetPathPoints() => m_PathPoints;
+    public float m_Radius = 5;
+
+    private void Awake() {
+        Init();
+        GeneratePath();
+        GenerateMesh (m_MeshData, m_PathPoints);
+    }
 
     private void Init () {
         if (m_Mesh == null) {
@@ -72,15 +80,9 @@ public class MeshGen : MonoBehaviour {
 
         AssetDatabase.CreateAsset (m_MeshData, GameConstants.MESH_DATA_FULL_PATH);
     }
-
-    int lastPathPointsCount = 0;
     private void OnDrawGizmosSelected () {
         Init ();
         GeneratePath ();
-        if (lastPathPointsCount != m_PathPoints.Count) {
-            CreateNewMeshData ();
-            lastPathPointsCount = m_PathPoints.Count;
-        }
         GenerateMesh (m_MeshData, m_PathPoints);
     }
 
@@ -97,9 +99,9 @@ public class MeshGen : MonoBehaviour {
 
             m_PathPoints.Add (new Vector3 (0, y, x));
 
-            Gizmos.DrawSphere (m_PathPoints[m_PathPoints.Count - 1], 0.21f);
-            Gizmos.color = Color.white;
-            Gizmos.DrawSphere (new Vector3 (0, 0, x), 0.1f);
+            // Gizmos.DrawSphere (m_PathPoints[m_PathPoints.Count - 1], 0.21f);
+            // Gizmos.color = Color.white;
+            // Gizmos.DrawSphere (new Vector3 (0, 0, x), 0.1f);
         }
     }
 
@@ -125,7 +127,7 @@ public class MeshGen : MonoBehaviour {
                 vertexList.Add (mp.LocalToWorld (m_MeshData.vertices[i].points));
                 normalList.Add (mp.LocalToWorldNormal (m_MeshData.vertices[i].normals));
 
-                Gizmos.DrawSphere (vertexList[vertexList.Count - 1], 0.1f);
+                //Gizmos.DrawSphere (vertexList[vertexList.Count - 1], 0.1f);
             }
         }
 
@@ -167,5 +169,6 @@ public class MeshGen : MonoBehaviour {
         m_Mesh.SetTriangles (triangleIndices, 0);
         m_Mesh.SetNormals (normalList);
     }
+
 
 }
