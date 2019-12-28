@@ -1,6 +1,14 @@
 ﻿using System;
 using UnityEngine;
 
+public enum BoxType {
+
+    NONE = -1,
+    GREEN = 0,
+    BLUE,
+    YELLOW
+}
+
 public class GameConstants {
     public const string MESH_DATA_FILE_NAME = "path_data.asset";
     public const string MESH_DATA_FULL_PATH = "Assets/Data/" + MESH_DATA_FILE_NAME;

@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoxMovementController : MonoBehaviour {
+public class BoxController : MonoBehaviour {
 
     [SerializeField] List<GameObject> m_BoxList = new List<GameObject> ();
     [SerializeField] MeshGen m_GeneratedMesh;
     [SerializeField] float m_Speed = 2;
+    [SerializeField] float m_RotSpeed = 3;
+
     private List<Vector3> m_PathPoints;
     private int m_CurrentPathIndex = 0;
-    private Ticker m_BoxMovementTicker = new Ticker ();
 
     private float m_CurrentAngle = 0;
 
@@ -27,11 +28,6 @@ public class BoxMovementController : MonoBehaviour {
             m_BoxList[i].transform.localPosition = GameMath.GetPositionWithRadius (transform.position, m_GeneratedMesh.m_Radius * 1.5f, angleInRad);
         }
 
-        // m_BoxMovementTicker.SetFrequency (0.5f);
-        // m_BoxMovementTicker.QueAction (() => {
-        //     SlowUpdate ();
-        // });
-        // m_BoxMovementTicker.Start ();
     }
 
     private void Update () {
@@ -40,9 +36,9 @@ public class BoxMovementController : MonoBehaviour {
             RotateBoxes ();
 
             if (Input.GetMouseButton (0)) {
-                m_CurrentAngle += Time.deltaTime;
+                m_CurrentAngle += Time.deltaTime * m_RotSpeed;
             } else {
-                m_CurrentAngle = Mathf.Clamp(m_CurrentAngle - Time.deltaTime, 0, m_CurrentAngle);
+                m_CurrentAngle = Mathf.Clamp (m_CurrentAngle - (Time.deltaTime * m_RotSpeed), 0, m_CurrentAngle);
             }
 
         }
@@ -59,7 +55,7 @@ public class BoxMovementController : MonoBehaviour {
             Vector3.zero, m_GeneratedMesh.m_Radius * 1.5f, secondAngle
         );
 
-        if (firstAngle >= (GameMath.TAU + (GameMath.TAU / 4)) ){ //one full circle
+        if (firstAngle >= (GameMath.TAU + (GameMath.TAU / 4))) { //one full circle
             m_CurrentAngle = 0;
         }
     }
@@ -68,15 +64,11 @@ public class BoxMovementController : MonoBehaviour {
         Vector3 direction = m_PathPoints[m_CurrentPathIndex + 1] - m_PathPoints[m_CurrentPathIndex];
         transform.position = transform.position + direction.normalized * m_Speed * Time.deltaTime;
 
-        transform.rotation = Quaternion.Lerp (transform.rotation, Quaternion.LookRotation (direction.normalized), m_Speed * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (direction.normalized), m_Speed * Time.deltaTime);
 
         if (transform.position.z >= (m_PathPoints[m_CurrentPathIndex + 1].z * 0.99f)) {
             m_CurrentPathIndex = m_CurrentPathIndex + 1;
         }
-    }
-
-    private void SlowUpdate () {
-
     }
 
 }
