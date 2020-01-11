@@ -22,12 +22,12 @@ public class MeshGen : MonoBehaviour {
     private Mesh m_Mesh;
     private DataAsset m_MeshData;
 
-    public List<Vector3> GetPathPoints() => m_PathPoints;
+    public List<Vector3> GetPathPoints () => m_PathPoints;
     public float m_Radius = 5;
 
-    private void Awake() {
-        Init();
-        GeneratePath();
+    private void Awake () {
+        Init ();
+        GeneratePath ();
         GenerateMesh (m_MeshData, m_PathPoints);
     }
 
@@ -169,6 +169,5 @@ public class MeshGen : MonoBehaviour {
         m_Mesh.SetTriangles (triangleIndices, 0);
         m_Mesh.SetNormals (normalList);
     }
-
 
 }
