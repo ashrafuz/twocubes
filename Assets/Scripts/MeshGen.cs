@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using AUZ_UTIL;
 
 [RequireComponent (typeof (MeshFilter))]
 [RequireComponent (typeof (MeshRenderer))]
-public class MeshGen : MonoBehaviour {
+public class MeshGen : SlowMono {
 
     [Header ("Path Variables")]
     [SerializeField] float m_WaveAmplitude = 1;
@@ -27,6 +28,13 @@ public class MeshGen : MonoBehaviour {
 
     private void Awake () {
         Init ();
+        SetUpdateRateInSeconds (2);
+
+        GeneratePath ();
+        GenerateMesh (m_MeshData, m_PathPoints);
+    }
+
+    protected override void SlowUpdate () {
         GeneratePath ();
         GenerateMesh (m_MeshData, m_PathPoints);
     }
@@ -91,6 +99,7 @@ public class MeshGen : MonoBehaviour {
 
         float currentAmplitude = m_WaveAmplitude;
         float currentFrequency = m_Frequency;
+
         for (int i = 0; i < m_StepValue; i++) {
             Gizmos.color = Color.grey;
             float t = i / (float) m_StepValue;
@@ -98,6 +107,10 @@ public class MeshGen : MonoBehaviour {
             float y = currentAmplitude * Mathf.Sin (currentFrequency * x);
 
             m_PathPoints.Add (new Vector3 (0, y, x));
+
+            // if (m_StepValue % 3 == 0) {
+            //     currentAmplitude = currentAmplitude * Random.Range (0.8f, 1.2f);
+            // }
 
             // Gizmos.DrawSphere (m_PathPoints[m_PathPoints.Count - 1], 0.21f);
             // Gizmos.color = Color.white;
