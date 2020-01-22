@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3766667bf45c6ba478453a0b5f604221, type: 3}
+  m_Name: bezier_path
+  m_EditorClassIdentifier: 
+  vertices:
+  - points: {x: 3, y: 0}
+    normals: {x: 1, y: 0}
+    onlyUs: 0
+  - points: {x: 2.97, y: 0}
+    normals: {x: -1, y: -0}
+    onlyUs: 0
+  - points: {x: 2.7716386, y: 1.1480503}
+    normals: {x: 0.92387956, y: 0.38268343}
+    onlyUs: 0
+  - points: {x: 2.7439222, y: 1.1365699}
+    normals: {x: -0.92387956, y: -0.38268343}
+    onlyUs: 0
+  - points: {x: 2.1213205, y: 2.1213202}
+    normals: {x: 0.7071068, y: 0.70710677}
+    onlyUs: 0
+  - points: {x: 2.1001072, y: 2.100107}
+    normals: {x: -0.7071068, y: -0.70710677}
+    onlyUs: 0
+  - points: {x: 1.1480503, y: 2.7716384}
+    normals: {x: 0.38268346, y: 0.92387956}
+    onlyUs: 0
+  - points: {x: 1.1365699, y: 2.743922}
+    normals: {x: -0.38268346, y: -0.92387956}
+    onlyUs: 0
+  - points: {x: 0.00000022649371, y: 3}
+    normals: {x: 0.0000000754979, y: 1}
+    onlyUs: 0
+  - points: {x: 0.00000022422877, y: 2.97}
+    normals: {x: -0.0000000754979, y: -1}
+    onlyUs: 0
+  - points: {x: -1.1480498, y: 2.7716386}
+    normals: {x: -0.3826833, y: 0.9238796}
+    onlyUs: 0
+  - points: {x: -1.1365694, y: 2.7439222}
+    normals: {x: 0.3826833, y: -0.9238796}
+    onlyUs: 0
+  - points: {x: -2.1213202, y: 2.1213202}
+    normals: {x: -0.7071068, y: 0.7071068}
+    onlyUs: 0
+  - points: {x: -2.100107, y: 2.100107}
+    normals: {x: 0.7071068, y: -0.7071068}
+    onlyUs: 0
+  - points: {x: -2.7716384, y: 1.1480504}
+    normals: {x: -0.92387956, y: 0.38268352}
+    onlyUs: 0
+  - points: {x: -2.743922, y: 1.13657}
+    normals: {x: 0.92387956, y: -0.38268352}
+    onlyUs: 0
+  - points: {x: -3, y: 0.00000045298742}
+    normals: {x: -1, y: 0.0000001509958}
+    onlyUs: 0
+  - points: {x: -2.97, y: 0.00000044845754}
+    normals: {x: 1, y: -0.0000001509958}
+    onlyUs: 0
+  - points: {x: -2.7716389, y: -1.1480496}
+    normals: {x: -0.9238796, y: -0.3826832}
+    onlyUs: 0
+  - points: {x: -2.7439225, y: -1.1365691}
+    normals: {x: 0.9238796, y: 0.3826832}
+    onlyUs: 0
+  - points: {x: -2.121321, y: -2.1213198}
+    normals: {x: -0.707107, y: -0.7071066}
+    onlyUs: 0
+  - points: {x: -2.1001077, y: -2.1001065}
+    normals: {x: 0.707107, y: 0.7071066}
+    onlyUs: 0
+  - points: {x: -1.1480508, y: -2.7716384}
+    normals: {x: -0.3826836, y: -0.92387944}
+    onlyUs: 0
+  - points: {x: -1.1365703, y: -2.743922}
+    normals: {x: 0.3826836, y: 0.92387944}
+    onlyUs: 0
+  - points: {x: 0.00000003577464, y: -3}
+    normals: {x: 0.00000001192488, y: -1}
+    onlyUs: 0
+  - points: {x: 0.000000035416893, y: -2.97}
+    normals: {x: -0.00000001192488, y: 1}
+    onlyUs: 0
+  - points: {x: 1.1480495, y: -2.7716389}
+    normals: {x: 0.38268316, y: -0.9238796}
+    onlyUs: 0
+  - points: {x: 1.136569, y: -2.7439225}
+    normals: {x: -0.38268316, y: 0.9238796}
+    onlyUs: 0
+  - points: {x: 2.12132, y: -2.1213207}
+    normals: {x: 0.70710665, y: -0.7071069}
+    onlyUs: 0
+  - points: {x: 2.1001067, y: -2.1001074}
+    normals: {x: -0.70710665, y: 0.7071069}
+    onlyUs: 0
+  - points: {x: 2.7716382, y: -1.1480516}
+    normals: {x: 0.9238794, y: -0.38268387}
+    onlyUs: 0
+  - points: {x: 2.7439218, y: -1.1365712}
+    normals: {x: -0.9238794, y: 0.38268387}
+    onlyUs: 0
+  lineIndices: 0100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000001700000018000000190000001a0000001b0000001c0000001d0000001e0000001f00000000000000
