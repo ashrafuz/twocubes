@@ -61,7 +61,7 @@ public class BezierPathGen : SlowMono {
                 randVec.y = m_MaxAmplitude * UnityEngine.Random.Range (0.5f, 1) * alternator;
                 alternator = -alternator;
             } else {
-                randVec.y = 0;
+                randVec.y = UnityEngine.Random.Range (0, 10f) * alternator;
             }
             m_InitialRandomPoints[i] = randVec;
         }
