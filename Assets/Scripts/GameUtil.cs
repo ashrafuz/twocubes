@@ -10,7 +10,7 @@ public enum BoxType {
 }
 
 public class GameConstants {
-    public const string MESH_DATA_FILE_NAME = "path_data.asset";
+    private const string MESH_DATA_FILE_NAME = "bezier_path.asset";
     public const string MESH_DATA_FULL_PATH = "Assets/Data/" + MESH_DATA_FILE_NAME;
 }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BlocksSpawner : MonoBehaviour {
-    [SerializeField] MeshGen m_GeneratedMesh;
+    [SerializeField] BezierPathGen m_GeneratedMesh;
     [SerializeField] Block m_BlockPrefab;
 
     [SerializeField] List<Block> m_InstantiatedBlocks;
@@ -11,10 +11,10 @@ public class BlocksSpawner : MonoBehaviour {
     void Start () {
         m_InstantiatedBlocks = new List<Block> ();
 
-        List<Vector3> pathPoints = new List<Vector3> ();
+        List<Vector2> pathPoints = new List<Vector2> ();
         pathPoints = m_GeneratedMesh.GetPathPoints ();
 
-        int t = (int) (pathPoints.Count * 0.3f);
+        int t = (int) (pathPoints.Count * 0.15f);
 
         for (int i = t; i < pathPoints.Count; i += 3) {
             int random = Random.Range (0, 100);

@@ -5,17 +5,16 @@ using UnityEngine;
 public class BoxController : MonoBehaviour {
 
     [SerializeField] List<GameObject> m_BoxList = new List<GameObject> ();
-    [SerializeField] MeshGen m_GeneratedMesh;
+    [SerializeField] BezierPathGen m_GeneratedMesh;
     [SerializeField] float m_Speed = 2;
     [SerializeField] float m_RotSpeed = 3;
 
-    private List<Vector3> m_PathPoints;
+    private List<Vector2> m_PathPoints = new List<Vector2> ();
     private int m_CurrentPathIndex = 0;
 
     private float m_CurrentAngle = 0;
 
     private void Start () {
-        m_PathPoints = new List<Vector3> ();
         m_PathPoints = m_GeneratedMesh.GetPathPoints ();
 
         m_CurrentPathIndex = 0;
@@ -25,7 +24,7 @@ public class BoxController : MonoBehaviour {
         for (int i = 0; i < m_BoxList.Count; i++) {
             float t = i / (float) m_BoxList.Count;
             float angleInRad = t * GameMath.TAU + (GameMath.TAU / 4); //to offset with 90
-            m_BoxList[i].transform.localPosition = GameMath.GetPositionWithRadius (transform.position, m_GeneratedMesh.m_Radius * 1.5f, angleInRad);
+            m_BoxList[i].transform.localPosition = GameMath.GetPositionWithRadius (transform.position, m_GeneratedMesh.m_Radius * 1.01f, angleInRad);
         }
 
     }
@@ -66,7 +65,7 @@ public class BoxController : MonoBehaviour {
 
         transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (direction.normalized), m_Speed * Time.deltaTime);
 
-        if (transform.position.z >= (m_PathPoints[m_CurrentPathIndex + 1].z * 0.99f)) {
+        if (transform.position.x >= (m_PathPoints[m_CurrentPathIndex + 1].x * 0.99f)) {
             m_CurrentPathIndex = m_CurrentPathIndex + 1;
         }
     }

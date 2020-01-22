@@ -29,6 +29,8 @@ public class BezierPathGen : SlowMono {
 
     private void Awake () {
         SetUpdateRateInSeconds (5);
+        GeneratePath ();
+        GenerateMesh ();
     }
 
     private void GeneratePath () {
@@ -215,7 +217,7 @@ public class BezierPathGen : SlowMono {
     }
 
     protected override void SlowUpdate () {
-        GeneratePath ();
-        GenerateMesh ();
+        // GeneratePath ();
+        // GenerateMesh ();
     }
 }
