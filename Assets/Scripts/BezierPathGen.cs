@@ -10,6 +10,7 @@ using System.IO;
 [RequireComponent (typeof (MeshRenderer))]
 public class BezierPathGen : SlowMono {
     [Range (1, 10)] public float m_Radius;
+    public bool m_DebugPath = false;
 
     [SerializeField] private Vector2[] m_InitialRandomPoints;
     [SerializeField] private List<Vector2> m_PathRingPoints;
@@ -217,7 +218,9 @@ public class BezierPathGen : SlowMono {
     }
 
     protected override void SlowUpdate () {
-        // GeneratePath ();
-        // GenerateMesh ();
+        if (m_DebugPath) {
+            GeneratePath ();
+            GenerateMesh ();
+        }
     }
 }
