@@ -9,18 +9,21 @@ using System.IO;
 [RequireComponent (typeof (MeshFilter))]
 [RequireComponent (typeof (MeshRenderer))]
 public class BezierPathGen : SlowMono {
-    [Range (1, 10)] public float m_Radius;
+    public static float m_Radius = 2;
     public bool m_DebugPath = false;
 
-    [SerializeField] private Vector2[] m_InitialRandomPoints;
-    [SerializeField] private List<Vector2> m_PathRingPoints;
-    [SerializeField][Range (8, 128)] private int m_FaceDetailLevel;
+    [SerializeField] Vector2[] m_InitialRandomPoints;
+    [SerializeField] Vector2[] m_NextRandomPoints;
+
+    [SerializeField] List<Vector2> m_PathRingPoints;
+
+    [SerializeField] static int m_FaceDetailLevel = 8;
 
     internal List<Vector2> GetPathPoints () {
         return m_PathRingPoints;
     }
 
-    [SerializeField] private DataAsset m_MeshData;
+    [SerializeField] DataAsset m_MeshData;
     private Mesh m_Mesh;
     [SerializeField][Range (2, 256)] int m_TotalCycle = 10;
 
@@ -28,26 +31,26 @@ public class BezierPathGen : SlowMono {
     [SerializeField] float m_MaxAmplitude = 5;
     [SerializeField] float m_PathSpan = 100;
 
+    [SerializeField] int m_CurrentSegmentIndex = 0;
+
     private void Awake () {
+        m_Mesh = new Mesh ();
+        m_Mesh.name = "BezierPath";
+        GetComponent<MeshFilter> ().sharedMesh = m_Mesh;
+
         SetUpdateRateInSeconds (5);
         GeneratePath ();
         GenerateMesh ();
     }
 
     private void GeneratePath () {
-        if (m_Mesh == null) {
-            m_Mesh = new Mesh ();
-
-            m_Mesh.name = "BezierPath";
-            GetComponent<MeshFilter> ().sharedMesh = m_Mesh;
-        }
-
         SetupRandomPathPoints ();
-        MakeBezierCurveAlongPath ();
-        if (!File.Exists (GameConstants.MESH_DATA_FULL_PATH)) {
-            CreateNewMeshData ();
+        if (m_CurrentSegmentIndex == 0) {
+            MakeBezierCurveAlongPath (m_InitialRandomPoints);
+            m_CurrentSegmentIndex = 1;
         } else {
-            m_MeshData = m_MeshData == null? AssetDatabase.LoadAssetAtPath<DataAsset> (GameConstants.MESH_DATA_FULL_PATH) : m_MeshData;
+            MakeBezierCurveAlongPath (m_InitialRandomPoints);
+            m_CurrentSegmentIndex = 0;
         }
     }
 
@@ -66,13 +69,9 @@ public class BezierPathGen : SlowMono {
             int nextRootPointIndex = (ring != m_PathRingPoints.Count - 1) ? ring + 1 : ring;
             Vector3 nextRootPoint = m_PathRingPoints[nextRootPointIndex];
 
-            if (nextRootPointIndex == ring) {
-                nextRootPoint = nextRootPoint * 1.01f; // to avoid look rotation log
-            }
-
             MeshPoint mp = new MeshPoint ();
             mp.position = rootPoint;
-            mp.rotation = Quaternion.LookRotation (nextRootPoint - rootPoint);
+            mp.rotation = (rootPoint == nextRootPoint) ? Quaternion.identity : Quaternion.LookRotation (nextRootPoint - rootPoint);
 
             //Gizmos.DrawSphere (mp.position, 0.5f);
 
@@ -82,7 +81,7 @@ public class BezierPathGen : SlowMono {
             }
         }
 
-        for (int ring = 0; ring < m_PathRingPoints.Count - 1; ring++) {
+        for (int ring = 0; ring < m_PathRingPoints.Count - 2; ring++) {
             int rootIndex = ring * m_MeshData.vertices.Length;
             int rootIndexNext = (ring + 1) * m_MeshData.vertices.Length;
 
@@ -121,8 +120,78 @@ public class BezierPathGen : SlowMono {
 
     } //generatemesh
 
-    private void CreateNewMeshData () {
-        m_MeshData = ScriptableObject.CreateInstance<DataAsset> ();
+    private Vector2 GetBezierPointsByHandle (Vector2 _p0, Vector2 _p1, Vector2 _p2, float _t) {
+        Vector2 s0 = Vector2.Lerp (_p0, _p1, _t);
+        Vector2 s1 = Vector2.Lerp (_p1, _p2, _t);
+        Vector2 m0 = Vector2.Lerp (s0, s1, _t);
+        return m0;
+    }
+
+    private void MakeBezierCurveAlongPath (Vector2[] _randomPoints) {
+        m_PathRingPoints?.Clear ();
+        m_PathRingPoints = new List<Vector2> ();
+        for (int i = 0; i < _randomPoints.Length - 2; i += 2) {
+            for (int j = 0; j < m_MeshDetailLevelPerCheckpoint; j++) {
+                float t = j / (float) m_MeshDetailLevelPerCheckpoint;
+                m_PathRingPoints.Add (GetBezierPointsByHandle (
+                    _randomPoints[i],
+                    _randomPoints[i + 1],
+                    _randomPoints[i + 2],
+                    t
+                ));
+            }
+        }
+        //m_PathRingPoints.Add (_randomPoints[_randomPoints.Length - 1]);
+    }
+
+    private void OnDrawGizmosSelected () {
+        if (m_Mesh == null) {
+            m_Mesh = new Mesh ();
+            m_Mesh.name = "BezierPath";
+            GetComponent<MeshFilter> ().sharedMesh = m_Mesh;
+        }
+        GeneratePath ();
+        GenerateMesh ();
+
+        for (int i = 0; i < m_PathRingPoints.Count; i++) {
+            Gizmos.DrawSphere (m_PathRingPoints[i], 0.2f);
+        }
+    }
+
+    private void SetupRandomPathPoints () {
+        int randPointArraySize = ((m_TotalCycle * 3) - (m_TotalCycle - 1));
+        m_InitialRandomPoints = new Vector2[randPointArraySize];
+        m_NextRandomPoints = new Vector2[randPointArraySize];
+        int alternator = 1;
+        for (int i = 0; i < randPointArraySize; i++) {
+            float t = i / (float) (randPointArraySize - 1);
+            Vector2 randVec = new Vector2 ();
+            randVec.x = m_PathSpan * t;
+            if (i % 2 == 1) {
+                randVec.y = m_MaxAmplitude * UnityEngine.Random.Range (0.5f, 1) * alternator;
+                alternator = -alternator;
+            } else {
+                randVec.y = 0; //UnityEngine.Random.Range (0, 10f) * alternator;
+            }
+
+            m_InitialRandomPoints[i] = randVec;
+
+            randVec.x += m_PathSpan;
+            randVec.y = randVec.y != 0 ? m_MaxAmplitude * UnityEngine.Random.Range (0.5f, 1) * alternator : 0;
+
+            m_NextRandomPoints[i] = randVec;
+        }
+    }
+
+    protected override void SlowUpdate () {
+        //Debug.Log ("running slow update");
+        GeneratePath ();
+        GenerateMesh ();
+    }
+
+    [MenuItem ("Tools/CreateNewMeshData")]
+    public static void CreateNewMeshData () {
+        DataAsset meshData = ScriptableObject.CreateInstance<DataAsset> ();
 
         List<Vertex> vertices = new List<Vertex> ();
 
@@ -146,6 +215,8 @@ public class BezierPathGen : SlowMono {
             oppPoint.normals = -currentPoint.normals;
 
             vertices.Add (oppPoint);
+
+            Debug.Log ("angle in rad " + currentPoint.points + ", for " + i);
         }
 
         List<int> lineIndices = new List<int> ();
@@ -153,74 +224,14 @@ public class BezierPathGen : SlowMono {
             lineIndices.Add ((i + 1) % (m_FaceDetailLevel * 2));
         }
 
-        m_MeshData.vertices = vertices.ToArray ();
-        m_MeshData.lineIndices = lineIndices.ToArray ();
+        meshData.vertices = vertices.ToArray ();
+        meshData.lineIndices = lineIndices.ToArray ();
 
-        AssetDatabase.CreateAsset (m_MeshData, GameConstants.MESH_DATA_FULL_PATH);
-    }
-
-    private Vector2 GetBezierPointsByHandle (Vector2 _p0, Vector2 _p1, Vector2 _p2, float _t) {
-        Vector2 s0 = Vector2.Lerp (_p0, _p1, _t);
-        Vector2 s1 = Vector2.Lerp (_p1, _p2, _t);
-        Vector2 m0 = Vector2.Lerp (s0, s1, _t);
-        return m0;
-    }
-
-    private void MakeBezierCurveAlongPath () {
-        Gizmos.color = Color.red;
-        m_PathRingPoints = new List<Vector2> ();
-        for (int i = 0; i < m_InitialRandomPoints.Length - 2; i += 2) {
-            for (int j = 0; j < m_MeshDetailLevelPerCheckpoint; j++) {
-                float t = j / (float) m_MeshDetailLevelPerCheckpoint;
-                m_PathRingPoints.Add (GetBezierPointsByHandle (
-                    m_InitialRandomPoints[i],
-                    m_InitialRandomPoints[i + 1],
-                    m_InitialRandomPoints[i + 2],
-                    t
-                ));
-            }
+        if (File.Exists (GameConstants.MESH_DATA_FULL_PATH)) {
+            File.Delete (GameConstants.MESH_DATA_FULL_PATH);
         }
 
-        m_PathRingPoints.Add (m_InitialRandomPoints[m_InitialRandomPoints.Length - 1]);
+        AssetDatabase.CreateAsset (meshData, GameConstants.MESH_DATA_FULL_PATH);
     }
 
-    private void SetupRandomPathPoints () {
-        int randPointArraySize = ((m_TotalCycle * 3) - (m_TotalCycle - 1));
-        m_InitialRandomPoints = new Vector2[randPointArraySize];
-        int alternator = 1;
-        for (int i = 0; i < m_InitialRandomPoints.Length; i++) {
-            float t = i / (float) m_InitialRandomPoints.Length;
-            Vector2 randVec = new Vector2 ();
-            randVec.x = m_PathSpan * t;
-            if (i % 2 == 1) {
-                randVec.y = m_MaxAmplitude * UnityEngine.Random.Range (0.5f, 1) * alternator;
-                alternator = -alternator;
-            } else {
-                randVec.y = 0; //UnityEngine.Random.Range (0, 10f) * alternator;
-            }
-            m_InitialRandomPoints[i] = randVec;
-        }
-    }
-
-    private void OnDrawGizmosSelected () {
-        //GeneratePath ();
-        //GenerateMesh ();
-
-        // Gizmos.color = Color.green;
-        // for (int i = 0; i < m_InitialRandomPoints.Length; i++) {
-        //     Gizmos.DrawSphere (m_InitialRandomPoints[i], 0.5f);
-        // }
-
-        // Gizmos.color = Color.red;
-        // for (int i = 0; i < m_PathRingPoints.Count; i++) {
-        //     Gizmos.DrawSphere (m_PathRingPoints[i], 0.3f);
-        // }
-    }
-
-    protected override void SlowUpdate () {
-        if (m_DebugPath) {
-            GeneratePath ();
-            GenerateMesh ();
-        }
-    }
 }

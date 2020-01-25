@@ -24,7 +24,7 @@ public class BoxController : MonoBehaviour {
         for (int i = 0; i < m_BoxList.Count; i++) {
             float t = i / (float) m_BoxList.Count;
             float angleInRad = t * GameMath.TAU + (GameMath.TAU / 4); //to offset with 90
-            m_BoxList[i].transform.localPosition = GameMath.GetPositionWithRadius (transform.position, m_GeneratedMesh.m_Radius * 1.01f, angleInRad);
+            m_BoxList[i].transform.localPosition = GameMath.GetPositionWithRadius (transform.position, BezierPathGen.m_Radius * 1.01f, angleInRad);
         }
 
     }
@@ -48,10 +48,10 @@ public class BoxController : MonoBehaviour {
         float secondAngle = firstAngle + GameMath.TAU * 0.5f;
 
         m_BoxList[0].transform.localPosition = GameMath.GetPositionWithRadius (
-            Vector3.zero, m_GeneratedMesh.m_Radius * 1.5f, firstAngle
+            Vector3.zero, BezierPathGen.m_Radius * 1.5f, firstAngle
         );
         m_BoxList[1].transform.localPosition = GameMath.GetPositionWithRadius (
-            Vector3.zero, m_GeneratedMesh.m_Radius * 1.5f, secondAngle
+            Vector3.zero, BezierPathGen.m_Radius * 1.5f, secondAngle
         );
 
         if (firstAngle >= (GameMath.TAU + (GameMath.TAU / 4))) { //one full circle

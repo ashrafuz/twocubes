@@ -27,7 +27,7 @@ public class BlocksSpawner : MonoBehaviour {
     private void SpawnBlock (Vector3 _pos) { //TODO, might want to take account of rotation
         Block newBlock = Instantiate (
             m_BlockPrefab,
-            new Vector3 (_pos.x, _pos.y + m_GeneratedMesh.m_Radius * 1.2f, _pos.z),
+            new Vector3 (_pos.x, _pos.y + BezierPathGen.m_Radius * 1.2f, _pos.z),
             Quaternion.identity
         );
         newBlock.transform.SetParent (this.transform);

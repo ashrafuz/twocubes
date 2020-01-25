@@ -17,10 +17,6 @@ namespace AUZ_UTIL {
 
         protected abstract void SlowUpdate ();
 
-        protected virtual void Start () {
-            SetUpdateRateInSeconds (1);
-        }
-
         protected virtual void Update () {
             if (m_IsRunning) {
                 m_ElapsedTime += Time.deltaTime;
