@@ -1,10 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.IO;
 using AUZ_UTIL;
 using UnityEditor;
-using System;
-using System.IO;
+using UnityEngine;
 
 [RequireComponent (typeof (MeshFilter))]
 [RequireComponent (typeof (MeshRenderer))]
@@ -31,8 +31,6 @@ public class BezierPathGen : SlowMono {
     [SerializeField] float m_MaxAmplitude = 5;
     [SerializeField] float m_PathSpan = 100;
 
-    [SerializeField] int m_CurrentSegmentIndex = 0;
-
     private void Awake () {
         m_Mesh = new Mesh ();
         m_Mesh.name = "BezierPath";
@@ -45,13 +43,11 @@ public class BezierPathGen : SlowMono {
 
     private void GeneratePath () {
         SetupRandomPathPoints ();
-        if (m_CurrentSegmentIndex == 0) {
-            MakeBezierCurveAlongPath (m_InitialRandomPoints);
-            m_CurrentSegmentIndex = 1;
-        } else {
-            MakeBezierCurveAlongPath (m_InitialRandomPoints);
-            m_CurrentSegmentIndex = 0;
-        }
+        m_PathRingPoints?.Clear ();
+        m_PathRingPoints = new List<Vector2> ();
+
+        MakeBezierCurveAlongPath (m_InitialRandomPoints);
+        MakeBezierCurveAlongPath (m_NextRandomPoints);
     }
 
     private void GenerateMesh () {
@@ -128,8 +124,6 @@ public class BezierPathGen : SlowMono {
     }
 
     private void MakeBezierCurveAlongPath (Vector2[] _randomPoints) {
-        m_PathRingPoints?.Clear ();
-        m_PathRingPoints = new List<Vector2> ();
         for (int i = 0; i < _randomPoints.Length - 2; i += 2) {
             for (int j = 0; j < m_MeshDetailLevelPerCheckpoint; j++) {
                 float t = j / (float) m_MeshDetailLevelPerCheckpoint;
@@ -175,9 +169,16 @@ public class BezierPathGen : SlowMono {
             }
 
             m_InitialRandomPoints[i] = randVec;
+        }
 
+        m_NextRandomPoints[0] = m_InitialRandomPoints[randPointArraySize - 1];
+        for (int i = 1; i < randPointArraySize; i++) {
+            Vector2 randVec = m_InitialRandomPoints[i];
             randVec.x += m_PathSpan;
-            randVec.y = randVec.y != 0 ? m_MaxAmplitude * UnityEngine.Random.Range (0.5f, 1) * alternator : 0;
+            if (randVec.y != 0) {
+                randVec.y = m_MaxAmplitude * UnityEngine.Random.Range (0.5f, 1) * alternator;
+                alternator = -alternator;
+            }
 
             m_NextRandomPoints[i] = randVec;
         }
@@ -216,7 +217,7 @@ public class BezierPathGen : SlowMono {
 
             vertices.Add (oppPoint);
 
-            Debug.Log ("angle in rad " + currentPoint.points + ", for " + i);
+            //Debug.Log ("angle in rad " + currentPoint.points + ", for " + i);
         }
 
         List<int> lineIndices = new List<int> ();
