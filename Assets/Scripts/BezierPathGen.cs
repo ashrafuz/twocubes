@@ -12,9 +12,6 @@ public class BezierPathGen : SlowMono {
     public static float m_Radius = 2;
     public bool m_DebugPath = false;
 
-    [SerializeField] Vector2[] m_InitialRandomPoints;
-    [SerializeField] Vector2[] m_NextRandomPoints;
-
     [SerializeField] List<Vector2> m_PathRingPoints;
 
     [SerializeField] static int m_FaceDetailLevel = 8;
@@ -24,35 +21,45 @@ public class BezierPathGen : SlowMono {
     }
 
     [SerializeField] DataAsset m_MeshData;
-    private Mesh m_Mesh;
     [SerializeField][Range (2, 256)] int m_TotalCycle = 10;
 
     [SerializeField] int m_MeshDetailLevelPerCheckpoint = 4;
     [SerializeField] float m_MaxAmplitude = 5;
     [SerializeField] float m_PathSpan = 100;
+    private float m_CurrentShiftX = 0;
+    private int currentSegmentIndex = 0;
 
     private void Awake () {
-        m_Mesh = new Mesh ();
-        m_Mesh.name = "BezierPath";
-        GetComponent<MeshFilter> ().sharedMesh = m_Mesh;
-
         SetUpdateRateInSeconds (5);
-        GeneratePath ();
+        ClearPath ();
+        GenerateNewPath ();
         GenerateMesh ();
     }
 
-    private void GeneratePath () {
-        SetupRandomPathPoints ();
+    protected override void SlowUpdate () {
+        GenerateNewPath ();
+        GenerateMesh ();
+    }
+
+    private void ClearPath () {
         m_PathRingPoints?.Clear ();
         m_PathRingPoints = new List<Vector2> ();
+    }
 
-        MakeBezierCurveAlongPath (m_InitialRandomPoints);
-        MakeBezierCurveAlongPath (m_NextRandomPoints);
+    private void GenerateNewPath () {
+        Vector2[] randomPoints = SetupRandomPathPoints ();
+
+        currentSegmentIndex++;
+        if (currentSegmentIndex >= 3) { // pooling
+            //Debug.Log ("pooling");
+            m_PathRingPoints.RemoveRange (0, (randomPoints.Length / 2) * m_MeshDetailLevelPerCheckpoint);
+            currentSegmentIndex = 0;
+        }
+
+        MakeBezierCurveAlongPath (randomPoints);
     }
 
     private void GenerateMesh () {
-        m_Mesh.Clear ();
-
         List<Vector3> vertexList = new List<Vector3> ();
         List<Vector3> normalList = new List<Vector3> ();
         List<int> triangleIndices = new List<int> ();
@@ -110,9 +117,14 @@ public class BezierPathGen : SlowMono {
             }
         }
 
-        m_Mesh.SetVertices (vertexList);
-        m_Mesh.SetTriangles (triangleIndices, 0);
-        m_Mesh.SetNormals (normalList);
+        Mesh newMesh = new Mesh ();
+        newMesh.SetVertices (vertexList);
+        newMesh.SetTriangles (triangleIndices, 0);
+        newMesh.SetNormals (normalList);
+
+        MeshFilter mf = GetComponent<MeshFilter> ();
+        mf.sharedMesh.Clear ();
+        mf.sharedMesh = newMesh;
 
     } //generatemesh
 
@@ -135,32 +147,30 @@ public class BezierPathGen : SlowMono {
                 ));
             }
         }
-        //m_PathRingPoints.Add (_randomPoints[_randomPoints.Length - 1]);
     }
 
-    private void OnDrawGizmosSelected () {
-        if (m_Mesh == null) {
-            m_Mesh = new Mesh ();
-            m_Mesh.name = "BezierPath";
-            GetComponent<MeshFilter> ().sharedMesh = m_Mesh;
-        }
-        GeneratePath ();
-        GenerateMesh ();
+    // private void OnDrawGizmosSelected () {
+    //     if (m_Mesh == null) {
+    //         m_Mesh = new Mesh ();
+    //         m_Mesh.name = "BezierPath";
+    //         GetComponent<MeshFilter> ().sharedMesh = m_Mesh;
+    //     }
+    //     GeneratePath ();
+    //     GenerateMesh ();
 
-        for (int i = 0; i < m_PathRingPoints.Count; i++) {
-            Gizmos.DrawSphere (m_PathRingPoints[i], 0.2f);
-        }
-    }
+    //     for (int i = 0; i < m_PathRingPoints.Count; i++) {
+    //         Gizmos.DrawSphere (m_PathRingPoints[i], 0.2f);
+    //     }
+    // }
 
-    private void SetupRandomPathPoints () {
+    private Vector2[] SetupRandomPathPoints () {
         int randPointArraySize = ((m_TotalCycle * 3) - (m_TotalCycle - 1));
-        m_InitialRandomPoints = new Vector2[randPointArraySize];
-        m_NextRandomPoints = new Vector2[randPointArraySize];
+        Vector2[] randPoints = new Vector2[randPointArraySize];
         int alternator = 1;
         for (int i = 0; i < randPointArraySize; i++) {
             float t = i / (float) (randPointArraySize - 1);
             Vector2 randVec = new Vector2 ();
-            randVec.x = m_PathSpan * t;
+            randVec.x = m_CurrentShiftX + m_PathSpan * t;
             if (i % 2 == 1) {
                 randVec.y = m_MaxAmplitude * UnityEngine.Random.Range (0.5f, 1) * alternator;
                 alternator = -alternator;
@@ -168,26 +178,11 @@ public class BezierPathGen : SlowMono {
                 randVec.y = 0; //UnityEngine.Random.Range (0, 10f) * alternator;
             }
 
-            m_InitialRandomPoints[i] = randVec;
+            randPoints[i] = randVec;
         }
 
-        m_NextRandomPoints[0] = m_InitialRandomPoints[randPointArraySize - 1];
-        for (int i = 1; i < randPointArraySize; i++) {
-            Vector2 randVec = m_InitialRandomPoints[i];
-            randVec.x += m_PathSpan;
-            if (randVec.y != 0) {
-                randVec.y = m_MaxAmplitude * UnityEngine.Random.Range (0.5f, 1) * alternator;
-                alternator = -alternator;
-            }
-
-            m_NextRandomPoints[i] = randVec;
-        }
-    }
-
-    protected override void SlowUpdate () {
-        //Debug.Log ("running slow update");
-        GeneratePath ();
-        GenerateMesh ();
+        m_CurrentShiftX = randPoints[randPoints.Length - 1].x;
+        return randPoints;
     }
 
     [MenuItem ("Tools/CreateNewMeshData")]
