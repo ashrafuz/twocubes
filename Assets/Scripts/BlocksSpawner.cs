@@ -11,25 +11,29 @@ public class BlocksSpawner : MonoBehaviour {
     void Start () {
         m_InstantiatedBlocks = new List<Block> ();
 
-        List<Vector2> pathPoints = new List<Vector2> ();
-        pathPoints = m_GeneratedMesh.GetPathPoints ();
+        List<Vector2> pathPoints = m_GeneratedMesh.GetPathPoints ();
 
         int t = (int) (pathPoints.Count * 0.15f);
-
-        for (int i = t; i < pathPoints.Count; i += 3) {
+        for (int i = t; i < pathPoints.Count - 10; i += 10) {
             int random = Random.Range (0, 100);
             if (random >= 50) {
-                SpawnBlock (pathPoints[i]);
+
+                Vector2 pointToSpawn = new Vector2 ();
+                float angleWithNextPoint = Vector2.SignedAngle (Vector2.right, (pathPoints[i + 1] - pathPoints[i]));
+                if (angleWithNextPoint < 0) {
+                    angleWithNextPoint = 360 + angleWithNextPoint;
+                }
+                pointToSpawn.x = Mathf.Cos (Mathf.Deg2Rad * (angleWithNextPoint + 90)) * (BezierPathGen.PathRadius * 1.2f);
+                pointToSpawn.y = Mathf.Sin (Mathf.Deg2Rad * (angleWithNextPoint + 90)) * (BezierPathGen.PathRadius * 1.2f);
+
+                pointToSpawn += pathPoints[i];
+                SpawnBlock (pointToSpawn);
             }
         }
     }
 
-    private void SpawnBlock (Vector3 _pos) { //TODO, might want to take account of rotation
-        Block newBlock = Instantiate (
-            m_BlockPrefab,
-            new Vector3 (_pos.x, _pos.y + BezierPathGen.m_Radius * 1.2f, _pos.z),
-            Quaternion.identity
-        );
+    private void SpawnBlock (Vector3 _pos) {
+        Block newBlock = Instantiate (m_BlockPrefab, _pos, Quaternion.identity);
         newBlock.transform.SetParent (this.transform);
         newBlock.SetRandomType ();
 

@@ -9,8 +9,7 @@ using UnityEngine;
 [RequireComponent (typeof (MeshFilter))]
 [RequireComponent (typeof (MeshRenderer))]
 public class BezierPathGen : SlowMono {
-    public static float m_Radius = 2;
-    public bool m_DebugPath = false;
+    public static float PathRadius = 1.2f;
 
     [SerializeField] List<Vector2> m_PathRingPoints;
 
@@ -30,7 +29,7 @@ public class BezierPathGen : SlowMono {
     private int currentSegmentIndex = 0;
 
     private void Awake () {
-        SetUpdateRateInSeconds (5);
+        SetUpdateRateInSeconds (20);
         ClearPath ();
         GenerateNewPath ();
         GenerateMesh ();
@@ -196,8 +195,8 @@ public class BezierPathGen : SlowMono {
             float angleInRad = t * GameMath.TAU;
 
             Vertex currentPoint = new Vertex ();
-            currentPoint.points.x = Mathf.Cos (angleInRad) * m_Radius;
-            currentPoint.points.y = Mathf.Sin (angleInRad) * m_Radius;
+            currentPoint.points.x = Mathf.Cos (angleInRad) * PathRadius;
+            currentPoint.points.y = Mathf.Sin (angleInRad) * PathRadius;
 
             currentPoint.normals = currentPoint.points.normalized;
             vertices.Add (currentPoint);
