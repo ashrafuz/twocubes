@@ -902,7 +902,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5d3b4a2606a40a418cc013a4af88667, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_GeneratedMesh: {fileID: 734907926}
+  m_Track: {fileID: 734907926}
   m_BlockPrefab: {fileID: 4286646935517970990, guid: 240c8eda4845e2644aff8c630b77ff94,
     type: 3}
   m_InstantiatedBlocks: []

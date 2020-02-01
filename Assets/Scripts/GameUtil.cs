@@ -4,14 +4,26 @@ using UnityEngine;
 public enum BoxType {
 
     NONE = -1,
-    GREEN = 0,
-    BLUE,
-    YELLOW
+    BLUE = 0,
+    YELLOW = 1
 }
 
 public class GameConstants {
     private const string MESH_DATA_FILE_NAME = "bezier_path.asset";
     public const string MESH_DATA_FULL_PATH = "Assets/Data/" + MESH_DATA_FILE_NAME;
+}
+
+public static class Helper {
+    public static bool IsPointCloseToCamera (Vector3 _point, Camera _cam, float _threshold) {
+        _point.y = 0;
+        _point.z = 0;
+        Vector3 diff = _point - new Vector3 (_cam.transform.position.x, 0, 0);
+        Debug.Log ("diff " + diff + ", squre mag:: " + diff.sqrMagnitude);
+        if (diff.sqrMagnitude < _threshold) {
+            return true;
+        }
+        return false;
+    }
 }
 
 public class MeshPoint {

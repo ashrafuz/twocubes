@@ -11,7 +11,10 @@ using UnityEngine;
 public class TrackManager : SlowMono {
     public static float PathRadius = 1.2f;
 
+    public event Action OnNewTrackGenerated;
+
     [SerializeField] List<Vector2> m_PathRingPoints;
+    [SerializeField] float m_PoolThresholdDistance = 150;
 
     [SerializeField] static int m_FaceDetailLevel = 8;
 
@@ -27,17 +30,23 @@ public class TrackManager : SlowMono {
     [SerializeField] float m_PathSpan = 100;
     private float m_CurrentShiftX = 0;
     private int currentSegmentIndex = 0;
+    private Camera m_MainCam;
 
     private void Awake () {
-        SetUpdateRateInSeconds (20);
+        SetUpdateRateInSeconds (3);
         ClearPath ();
         GenerateNewPath ();
         GenerateMesh ();
+
+        m_MainCam = Camera.main;
     }
 
     protected override void SlowUpdate () {
-        GenerateNewPath ();
-        GenerateMesh ();
+        bool isLastPointVisible = Helper.IsPointCloseToCamera (m_PathRingPoints[m_PathRingPoints.Count - 1], m_MainCam, m_PoolThresholdDistance);
+        if (isLastPointVisible) {
+            GenerateNewPath ();
+            GenerateMesh ();
+        }
     }
 
     private void ClearPath () {
@@ -56,6 +65,7 @@ public class TrackManager : SlowMono {
         }
 
         MakeBezierCurveAlongPath (randomPoints);
+        OnNewTrackGenerated?.Invoke ();
     }
 
     private void GenerateMesh () {

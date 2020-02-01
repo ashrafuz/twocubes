@@ -5,7 +5,7 @@ using UnityEngine;
 public class BoxController : MonoBehaviour {
 
     [SerializeField] List<GameObject> m_BoxList = new List<GameObject> ();
-    [SerializeField] TrackManager m_GeneratedMesh;
+    [SerializeField] TrackManager m_Track;
     [SerializeField] float m_Speed = 2;
     [SerializeField] float m_RotSpeed = 3;
 
@@ -15,18 +15,22 @@ public class BoxController : MonoBehaviour {
     private float m_CurrentAngle = 0;
 
     private void Start () {
-        m_PathPoints = m_GeneratedMesh.GetPathPoints ();
-
+        m_PathPoints = m_Track.GetPathPoints ();
         m_CurrentPathIndex = 0;
         m_CurrentAngle = 0;
-        transform.position = m_PathPoints[m_CurrentPathIndex];
 
+        transform.position = m_PathPoints[m_CurrentPathIndex];
         for (int i = 0; i < m_BoxList.Count; i++) {
             float t = i / (float) m_BoxList.Count;
             float angleInRad = t * GameMath.TAU + (GameMath.TAU / 4); //to offset with 90
             m_BoxList[i].transform.localPosition = GameMath.GetPositionWithRadius (transform.position, TrackManager.PathRadius * 1.01f, angleInRad);
         }
 
+        m_Track.OnNewTrackGenerated += UpdatePathPoints;
+    }
+
+    private void UpdatePathPoints () {
+        m_PathPoints = m_Track.GetPathPoints ();
     }
 
     private void Update () {

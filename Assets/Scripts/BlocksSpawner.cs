@@ -3,14 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BlocksSpawner : MonoBehaviour {
-    [SerializeField] TrackManager m_GeneratedMesh;
+    [SerializeField] TrackManager m_Track;
     [SerializeField] Block m_BlockPrefab;
-
     [SerializeField] List<Block> m_InstantiatedBlocks;
 
-    public void SpawnNextSet () {
+    private void Start () {
         m_InstantiatedBlocks = new List<Block> ();
-        List<Vector2> pathPoints = m_GeneratedMesh.GetPathPoints ();
+        m_Track.OnNewTrackGenerated += SpawnNextSet;
+    }
+
+    public void SpawnNextSet () {
+        for (int i = 0; i < m_InstantiatedBlocks.Count; i++) {
+            m_InstantiatedBlocks[i].gameObject.SetActive (false);
+        }
+
+        List<Vector2> pathPoints = m_Track.GetPathPoints ();
 
         int t = (int) (pathPoints.Count * 0.15f);
         for (int i = t; i < pathPoints.Count - 10; i += 10) {
@@ -32,7 +39,17 @@ public class BlocksSpawner : MonoBehaviour {
     }
 
     private void SpawnBlock (Vector3 _pos) {
-        Block newBlock = Instantiate (m_BlockPrefab, _pos, Quaternion.identity);
+        int idleBoxAvailableAt = -1;
+        for (int i = 0; i < m_InstantiatedBlocks.Count; i++) {
+            if (!m_InstantiatedBlocks[i].gameObject.activeInHierarchy) {
+                idleBoxAvailableAt = i;
+                break;
+            }
+        }
+
+        Block newBlock = idleBoxAvailableAt > -1 ? m_InstantiatedBlocks[idleBoxAvailableAt] :
+            Instantiate (m_BlockPrefab, _pos, Quaternion.identity);
+
         newBlock.transform.SetParent (this.transform);
         newBlock.SetRandomType ();
 
