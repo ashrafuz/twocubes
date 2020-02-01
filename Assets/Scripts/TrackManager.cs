@@ -11,7 +11,7 @@ using UnityEngine;
 public class TrackManager : SlowMono {
     public static float PathRadius = 1;
 
-    public event Action<int> OnNewTrackGenerated;
+    public bool m_GameIsRunning = false;
 
     [SerializeField] List<Vector2> m_PathRingPoints;
     [SerializeField] float m_PoolThresholdDistance = 150;
@@ -39,9 +39,18 @@ public class TrackManager : SlowMono {
         GenerateMesh ();
 
         m_MainCam = Camera.main;
+        m_GameIsRunning = true;
+    }
+
+    private void Start () {
+        GameEventManager.OnNoMoreLivesLeft += () => {
+            m_GameIsRunning = false;
+        };
     }
 
     protected override void SlowUpdate () {
+        if (!m_GameIsRunning) { return; }
+
         bool isLastPointVisible = Helper.IsPointCloseToCamera (m_PathRingPoints[m_PathRingPoints.Count - 1], m_MainCam, m_PoolThresholdDistance);
         if (isLastPointVisible) {
             GenerateNewPath ();
@@ -66,7 +75,7 @@ public class TrackManager : SlowMono {
         }
 
         MakeBezierCurveAlongPath (randomPoints);
-        OnNewTrackGenerated?.Invoke (totalPooledPoints);
+        GameEventManager.OnNewTrackGenerated?.Invoke (totalPooledPoints);
     }
 
     private void GenerateMesh () {

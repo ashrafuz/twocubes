@@ -25,9 +25,9 @@ public class Block : MonoBehaviour {
         // Debug.Log ("my mat " + m_MeshRend.material.name);
 
         if (string.Equals (other.transform.GetComponent<MeshRenderer> ().material.name, m_MeshRend.material.name)) {
-            Debug.Log ("points!");
+            GameEventManager.OnRightCollide?.Invoke ();
         } else {
-            Debug.Log ("die");
+            GameEventManager.OnWrongCollide?.Invoke ();
         }
     }
 }

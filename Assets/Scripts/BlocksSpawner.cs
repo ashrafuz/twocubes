@@ -12,11 +12,13 @@ public class BlocksSpawner : MonoBehaviour {
     private void Start () {
         m_MainCam = Camera.main;
         m_InstantiatedBlocks = new List<Block> ();
-        m_Track.OnNewTrackGenerated += SpawnNextSet;
+        GameEventManager.OnNewTrackGenerated += SpawnNextSet;
         SpawnNextSet (0);
     }
 
     public void SpawnNextSet (int _totalPooledPoints) {
+        if (!m_Track.m_GameIsRunning) { return; }
+
         for (int i = 0; i < m_InstantiatedBlocks.Count; i++) {
             //if camera passed my position, hide it
             if (m_MainCam.transform.position.x - 50 > m_InstantiatedBlocks[i].transform.position.x) {

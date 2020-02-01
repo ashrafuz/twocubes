@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BoxController : MonoBehaviour {
-
     [SerializeField] List<GameObject> m_BoxList = new List<GameObject> ();
     [SerializeField] TrackManager m_Track;
     [SerializeField] float m_Speed = 2;
@@ -26,7 +25,7 @@ public class BoxController : MonoBehaviour {
             m_BoxList[i].transform.localPosition = GameMath.GetPositionWithRadius (transform.position, TrackManager.PathRadius * 1.01f, angleInRad);
         }
 
-        m_Track.OnNewTrackGenerated += UpdatePathPoints;
+        GameEventManager.OnNewTrackGenerated += UpdatePathPoints;
     }
 
     private void OnDrawGizmos () {
@@ -42,6 +41,8 @@ public class BoxController : MonoBehaviour {
     }
 
     private void Update () {
+        if (!m_Track.m_GameIsRunning) { return; }
+
         if (m_CurrentPathIndex < m_PathPoints.Count - 2) {
             MoveForward ();
             RotateBoxes ();
