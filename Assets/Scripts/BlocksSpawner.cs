@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BlocksSpawner : MonoBehaviour {
-    [SerializeField] BezierPathGen m_GeneratedMesh;
+    [SerializeField] TrackManager m_GeneratedMesh;
     [SerializeField] Block m_BlockPrefab;
 
     [SerializeField] List<Block> m_InstantiatedBlocks;
 
-    void Start () {
+    public void SpawnNextSet () {
         m_InstantiatedBlocks = new List<Block> ();
-
         List<Vector2> pathPoints = m_GeneratedMesh.GetPathPoints ();
 
         int t = (int) (pathPoints.Count * 0.15f);
@@ -23,8 +22,8 @@ public class BlocksSpawner : MonoBehaviour {
                 if (angleWithNextPoint < 0) {
                     angleWithNextPoint = 360 + angleWithNextPoint;
                 }
-                pointToSpawn.x = Mathf.Cos (Mathf.Deg2Rad * (angleWithNextPoint + 90)) * (BezierPathGen.PathRadius * 1.2f);
-                pointToSpawn.y = Mathf.Sin (Mathf.Deg2Rad * (angleWithNextPoint + 90)) * (BezierPathGen.PathRadius * 1.2f);
+                pointToSpawn.x = Mathf.Cos (Mathf.Deg2Rad * (angleWithNextPoint + 90)) * (TrackManager.PathRadius * 1.2f);
+                pointToSpawn.y = Mathf.Sin (Mathf.Deg2Rad * (angleWithNextPoint + 90)) * (TrackManager.PathRadius * 1.2f);
 
                 pointToSpawn += pathPoints[i];
                 SpawnBlock (pointToSpawn);

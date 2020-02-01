@@ -316,7 +316,7 @@ GameObject:
   - component: {fileID: 734907927}
   - component: {fileID: 734907926}
   m_Layer: 0
-  m_Name: meshgen
+  m_Name: TrackManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -334,7 +334,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eaa0b581a60c964ab66e4356e30e962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DebugPath: 0
   m_PathRingPoints: []
   m_MeshData: {fileID: 11400000, guid: 1f72c98ff8e2f2f4aa21d6c5dd123ffd, type: 2}
   m_TotalCycle: 4

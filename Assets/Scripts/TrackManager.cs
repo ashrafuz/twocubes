@@ -8,7 +8,7 @@ using UnityEngine;
 
 [RequireComponent (typeof (MeshFilter))]
 [RequireComponent (typeof (MeshRenderer))]
-public class BezierPathGen : SlowMono {
+public class TrackManager : SlowMono {
     public static float PathRadius = 1.2f;
 
     [SerializeField] List<Vector2> m_PathRingPoints;
