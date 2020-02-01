@@ -29,7 +29,15 @@ public class BoxController : MonoBehaviour {
         m_Track.OnNewTrackGenerated += UpdatePathPoints;
     }
 
-    private void UpdatePathPoints () {
+    private void OnDrawGizmos () {
+        Gizmos.color = Color.green;
+        foreach (var item in m_PathPoints) {
+            Gizmos.DrawSphere (item, 0.1f);
+        }
+    }
+
+    private void UpdatePathPoints (int _totalPooledPoints) {
+        m_CurrentPathIndex -= _totalPooledPoints;
         m_PathPoints = m_Track.GetPathPoints ();
     }
 
@@ -65,13 +73,18 @@ public class BoxController : MonoBehaviour {
 
     private void MoveForward () {
         Vector3 direction = m_PathPoints[m_CurrentPathIndex + 1] - m_PathPoints[m_CurrentPathIndex];
-        transform.position = transform.position + direction.normalized * m_Speed * Time.deltaTime;
+        // transform.position = transform.position + direction.normalized * m_Speed * Time.deltaTime;
+        transform.position = Vector3.MoveTowards (transform.position, m_PathPoints[m_CurrentPathIndex], m_Speed * Time.deltaTime);
 
+        //Debug.Log ("current position " + Vector3.Distance (transform.position, m_PathPoints[m_CurrentPathIndex]));
         transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (direction.normalized), m_Speed * Time.deltaTime);
-
-        if (transform.position.x >= (m_PathPoints[m_CurrentPathIndex + 1].x * 0.99f)) {
+        if (Vector3.Distance (transform.position, m_PathPoints[m_CurrentPathIndex]) < 2.0f) {
+            // Swap the position of the cylinder.
             m_CurrentPathIndex = m_CurrentPathIndex + 1;
         }
+        // if (transform.position.x >= (m_PathPoints[m_CurrentPathIndex + 1].x * 0.99f)) {
+        //     m_CurrentPathIndex = m_CurrentPathIndex + 1;
+        // }
     }
 
 }

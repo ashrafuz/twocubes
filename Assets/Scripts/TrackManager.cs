@@ -9,9 +9,9 @@ using UnityEngine;
 [RequireComponent (typeof (MeshFilter))]
 [RequireComponent (typeof (MeshRenderer))]
 public class TrackManager : SlowMono {
-    public static float PathRadius = 1.2f;
+    public static float PathRadius = 1;
 
-    public event Action OnNewTrackGenerated;
+    public event Action<int> OnNewTrackGenerated;
 
     [SerializeField] List<Vector2> m_PathRingPoints;
     [SerializeField] float m_PoolThresholdDistance = 150;
@@ -56,16 +56,17 @@ public class TrackManager : SlowMono {
 
     private void GenerateNewPath () {
         Vector2[] randomPoints = SetupRandomPathPoints ();
-
+        int totalPooledPoints = 0;
         currentSegmentIndex++;
         if (currentSegmentIndex >= 3) { // pooling
             //Debug.Log ("pooling");
-            m_PathRingPoints.RemoveRange (0, (randomPoints.Length / 2) * m_MeshDetailLevelPerCheckpoint);
+            totalPooledPoints = (randomPoints.Length / 2) * m_MeshDetailLevelPerCheckpoint;
+            m_PathRingPoints.RemoveRange (0, totalPooledPoints);
             currentSegmentIndex = 0;
         }
 
         MakeBezierCurveAlongPath (randomPoints);
-        OnNewTrackGenerated?.Invoke ();
+        OnNewTrackGenerated?.Invoke (totalPooledPoints);
     }
 
     private void GenerateMesh () {
@@ -158,19 +159,12 @@ public class TrackManager : SlowMono {
         }
     }
 
-    // private void OnDrawGizmosSelected () {
-    //     if (m_Mesh == null) {
-    //         m_Mesh = new Mesh ();
-    //         m_Mesh.name = "BezierPath";
-    //         GetComponent<MeshFilter> ().sharedMesh = m_Mesh;
-    //     }
-    //     GeneratePath ();
-    //     GenerateMesh ();
-
-    //     for (int i = 0; i < m_PathRingPoints.Count; i++) {
-    //         Gizmos.DrawSphere (m_PathRingPoints[i], 0.2f);
-    //     }
-    // }
+    private void OnDrawGizmos () {
+        Gizmos.color = Color.red;
+        for (int i = 0; i < m_PathRingPoints.Count; i++) {
+            Gizmos.DrawSphere (m_PathRingPoints[i], 0.05f);
+        }
+    }
 
     private Vector2[] SetupRandomPathPoints () {
         int randPointArraySize = ((m_TotalCycle * 3) - (m_TotalCycle - 1));

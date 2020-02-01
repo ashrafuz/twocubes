@@ -18,7 +18,7 @@ public static class Helper {
         _point.y = 0;
         _point.z = 0;
         Vector3 diff = _point - new Vector3 (_cam.transform.position.x, 0, 0);
-        Debug.Log ("diff " + diff + ", squre mag:: " + diff.sqrMagnitude);
+        //Debug.Log ("diff " + diff + ", squre mag:: " + diff.sqrMagnitude);
         if (diff.sqrMagnitude < _threshold) {
             return true;
         }
