@@ -7,7 +7,10 @@ public class BlocksSpawner : MonoBehaviour {
     [SerializeField] Block m_BlockPrefab;
     [SerializeField] List<Block> m_InstantiatedBlocks;
 
+    private Camera m_MainCam;
+
     private void Start () {
+        m_MainCam = Camera.main;
         m_InstantiatedBlocks = new List<Block> ();
         m_Track.OnNewTrackGenerated += SpawnNextSet;
         SpawnNextSet (0);
@@ -15,7 +18,10 @@ public class BlocksSpawner : MonoBehaviour {
 
     public void SpawnNextSet (int _totalPooledPoints) {
         for (int i = 0; i < m_InstantiatedBlocks.Count; i++) {
-            m_InstantiatedBlocks[i].gameObject.SetActive (false);
+            //if camera passed my position, hide it
+            if (m_MainCam.transform.position.x - 50 > m_InstantiatedBlocks[i].transform.position.x) {
+                m_InstantiatedBlocks[i].gameObject.SetActive (false);
+            }
         }
 
         List<Vector2> pathPoints = m_Track.GetPathPoints ();
