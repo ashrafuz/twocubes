@@ -23,7 +23,7 @@ public class TrackManager : SlowMono {
     }
 
     [SerializeField] DataAsset m_MeshData;
-    [SerializeField][Range (2, 256)] int m_TotalCycle = 10;
+    [SerializeField][Range (1, 10)] int m_TotalCycle = 10;
 
     [SerializeField] int m_MeshDetailLevelPerCheckpoint = 4;
     [SerializeField] float m_MaxAmplitude = 5;
