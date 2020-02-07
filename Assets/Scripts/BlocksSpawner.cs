@@ -5,6 +5,7 @@ using UnityEngine;
 public class BlocksSpawner : MonoBehaviour {
     [SerializeField] TrackManager m_Track;
     [SerializeField] Block m_BlockPrefab;
+    [SerializeField] float m_BlockSpawnDistance;
     [SerializeField] List<Block> m_InstantiatedBlocks;
 
     private Camera m_MainCam;
@@ -37,8 +38,8 @@ public class BlocksSpawner : MonoBehaviour {
                 if (angleWithNextPoint < 0) {
                     angleWithNextPoint = 360 + angleWithNextPoint;
                 }
-                pointToSpawn.x = Mathf.Cos (Mathf.Deg2Rad * (angleWithNextPoint + 90)) * (TrackManager.PathRadius * 1.5f);
-                pointToSpawn.y = Mathf.Sin (Mathf.Deg2Rad * (angleWithNextPoint + 90)) * (TrackManager.PathRadius * 1.5f);
+                pointToSpawn.x = Mathf.Cos (Mathf.Deg2Rad * (angleWithNextPoint + 90)) * (TrackManager.PathRadius * m_BlockSpawnDistance);
+                pointToSpawn.y = Mathf.Sin (Mathf.Deg2Rad * (angleWithNextPoint + 90)) * (TrackManager.PathRadius * m_BlockSpawnDistance);
 
                 pointToSpawn += pathPoints[i];
                 SpawnBlock (pointToSpawn);

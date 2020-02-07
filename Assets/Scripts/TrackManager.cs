@@ -9,7 +9,7 @@ using UnityEngine;
 [RequireComponent (typeof (MeshFilter))]
 [RequireComponent (typeof (MeshRenderer))]
 public class TrackManager : SlowMono {
-    public static float PathRadius = 1;
+    public static float PathRadius = 0.35f;
 
     public bool m_GameIsRunning = false;
 

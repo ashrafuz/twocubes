@@ -7,6 +7,7 @@ public class BoxController : MonoBehaviour {
     [SerializeField] TrackManager m_Track;
     [SerializeField] float m_Speed = 2;
     [SerializeField] float m_RotSpeed = 3;
+    [SerializeField] float m_DistanceFromTrack = 2;
 
     private List<Vector2> m_PathPoints = new List<Vector2> ();
     private int m_CurrentPathIndex = 0;
@@ -61,10 +62,10 @@ public class BoxController : MonoBehaviour {
         float secondAngle = firstAngle + GameMath.TAU * 0.5f;
 
         m_BoxList[0].transform.localPosition = GameMath.GetPositionWithRadius (
-            Vector3.zero, TrackManager.PathRadius * 1.5f, firstAngle
+            Vector3.zero, TrackManager.PathRadius * m_DistanceFromTrack, firstAngle
         );
         m_BoxList[1].transform.localPosition = GameMath.GetPositionWithRadius (
-            Vector3.zero, TrackManager.PathRadius * 1.5f, secondAngle
+            Vector3.zero, TrackManager.PathRadius * m_DistanceFromTrack, secondAngle
         );
 
         if (firstAngle >= (GameMath.TAU + (GameMath.TAU / 4))) { //one full circle
@@ -74,18 +75,13 @@ public class BoxController : MonoBehaviour {
 
     private void MoveForward () {
         Vector3 direction = m_PathPoints[m_CurrentPathIndex + 1] - m_PathPoints[m_CurrentPathIndex];
-        // transform.position = transform.position + direction.normalized * m_Speed * Time.deltaTime;
         transform.position = Vector3.MoveTowards (transform.position, m_PathPoints[m_CurrentPathIndex], m_Speed * Time.deltaTime);
 
-        //Debug.Log ("current position " + Vector3.Distance (transform.position, m_PathPoints[m_CurrentPathIndex]));
         transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (direction.normalized), m_Speed * Time.deltaTime);
         if (Vector3.Distance (transform.position, m_PathPoints[m_CurrentPathIndex]) < 2.0f) {
             // Swap the position of the cylinder.
             m_CurrentPathIndex = m_CurrentPathIndex + 1;
         }
-        // if (transform.position.x >= (m_PathPoints[m_CurrentPathIndex + 1].x * 0.99f)) {
-        //     m_CurrentPathIndex = m_CurrentPathIndex + 1;
-        // }
     }
 
 }

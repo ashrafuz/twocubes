@@ -1389,6 +1389,7 @@ MonoBehaviour:
   m_Track: {fileID: 734907926}
   m_Speed: 5
   m_RotSpeed: 3
+  m_DistanceFromTrack: 2
 --- !u!4 &1727586644
 Transform:
   m_ObjectHideFlags: 0
@@ -1438,6 +1439,7 @@ MonoBehaviour:
   m_Track: {fileID: 734907926}
   m_BlockPrefab: {fileID: 4286646935517970990, guid: 240c8eda4845e2644aff8c630b77ff94,
     type: 3}
+  m_BlockSpawnDistance: 3
   m_InstantiatedBlocks: []
 --- !u!4 &1804534716
 Transform:
