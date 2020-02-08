@@ -16,6 +16,10 @@ public class BoxController : SlowMono {
 
     private float m_CurrentAngle = 0;
 
+    private void Awake () {
+        SetUpdateRateInSeconds (2);
+    }
+
     private void Start () {
 
         m_PathPoints = m_Track.GetPathPoints ();
@@ -32,8 +36,21 @@ public class BoxController : SlowMono {
         GameEventManager.OnNewTrackGenerated += UpdatePathPoints;
     }
 
-    protected override void SlowUpdate () {
+    private List<Tween> runningTweens;
 
+    protected override void SlowUpdate () {
+        if (runningTweens != null && runningTweens.Count > 0) {
+            foreach (var item in runningTweens) {
+                item.Kill ();
+            }
+            runningTweens.Clear ();
+        } else {
+            runningTweens = new List<Tween> ();
+        }
+
+        foreach (var item in m_BoxList) {
+            runningTweens.Add (item.transform.DOShakeRotation (1.9f, 8, 3, 50, false));
+        }
     }
 
     private void OnDrawGizmos () {

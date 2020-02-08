@@ -126,13 +126,13 @@ public class TrackManager : SlowMono {
                 triangleIndices.Add (currentB);
 
                 //opposite face
-                triangleIndices.Add (currentA);
-                triangleIndices.Add (nextA);
-                triangleIndices.Add (nextB);
+                // triangleIndices.Add (currentA);
+                // triangleIndices.Add (nextA);
+                // triangleIndices.Add (nextB);
 
-                triangleIndices.Add (nextB);
-                triangleIndices.Add (currentB);
-                triangleIndices.Add (currentA);
+                // triangleIndices.Add (nextB);
+                // triangleIndices.Add (currentB);
+                // triangleIndices.Add (currentA);
             }
         }
 
@@ -212,11 +212,11 @@ public class TrackManager : SlowMono {
             // Gizmos.DrawSphere (currentPoint.points, 0.2f);
 
             //2nd point, culling off
-            Vertex oppPoint = new Vertex ();
-            oppPoint.points = currentPoint.points * 0.99f; //slightly changed value because of Z level culling
-            oppPoint.normals = -currentPoint.normals;
+            // Vertex oppPoint = new Vertex ();
+            // oppPoint.points = currentPoint.points * 0.99f; //slightly changed value because of Z level culling
+            // oppPoint.normals = -currentPoint.normals;
 
-            vertices.Add (oppPoint);
+            // vertices.Add (oppPoint);
 
             //Debug.Log ("angle in rad " + currentPoint.points + ", for " + i);
         }
