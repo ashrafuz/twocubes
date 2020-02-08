@@ -139,7 +139,8 @@ public class TrackManager : SlowMono {
         Mesh newMesh = new Mesh ();
         newMesh.SetVertices (vertexList);
         newMesh.SetTriangles (triangleIndices, 0);
-        newMesh.SetNormals (normalList);
+        ///newMesh.SetNormals (normalList);
+        newMesh.RecalculateNormals ();
 
         MeshFilter mf = GetComponent<MeshFilter> ();
         mf.sharedMesh.Clear ();
@@ -165,13 +166,6 @@ public class TrackManager : SlowMono {
                     t
                 ));
             }
-        }
-    }
-
-    private void OnDrawGizmos () {
-        Gizmos.color = Color.red;
-        for (int i = 0; i < m_PathRingPoints.Count; i++) {
-            Gizmos.DrawSphere (m_PathRingPoints[i], 0.05f);
         }
     }
 

@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+using AUZ_UTIL;
 
-public class BoxController : MonoBehaviour {
+public class BoxController : SlowMono {
     [SerializeField] List<GameObject> m_BoxList = new List<GameObject> ();
     [SerializeField] TrackManager m_Track;
     [SerializeField] float m_Speed = 2;
@@ -15,6 +17,7 @@ public class BoxController : MonoBehaviour {
     private float m_CurrentAngle = 0;
 
     private void Start () {
+
         m_PathPoints = m_Track.GetPathPoints ();
         m_CurrentPathIndex = 0;
         m_CurrentAngle = 0;
@@ -29,6 +32,10 @@ public class BoxController : MonoBehaviour {
         GameEventManager.OnNewTrackGenerated += UpdatePathPoints;
     }
 
+    protected override void SlowUpdate () {
+
+    }
+
     private void OnDrawGizmos () {
         Gizmos.color = Color.green;
         foreach (var item in m_PathPoints) {
@@ -41,7 +48,8 @@ public class BoxController : MonoBehaviour {
         m_PathPoints = m_Track.GetPathPoints ();
     }
 
-    private void Update () {
+    protected override void Update () {
+        base.Update ();
         if (!m_Track.m_GameIsRunning) { return; }
 
         if (m_CurrentPathIndex < m_PathPoints.Count - 2) {
