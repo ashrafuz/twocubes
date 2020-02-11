@@ -969,7 +969,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 141109fb25f0083469e71ce8cb3e75c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 1604995614}
+  m_Material: {fileID: 1376050312}
   m_Color: {r: 0.9528302, g: 0.8420657, b: 0.373042, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
@@ -1197,6 +1197,45 @@ TrailRenderer:
   m_MinVertexDistance: 1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!21 &1376050312
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MPUI/Sprite Basic
+  m_Shader: {fileID: 4800000, guid: 0162a17359546d3479ae73858a9226ab, type: 3}
+  m_ShaderKeywords: CIRCLE OUTLINE PROCEDURAL_CUT
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _ColorMask: 15
+    - _Height: 400
+    - _LineWeight: 4
+    - _PixelWorldScale: 999999
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _UseUIAlphaClip: 0
+    - _Width: 400
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Radius: {r: 0, g: 0, b: 0, a: 0}
+    - _TextureSize: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1439135523
 GameObject:
   m_ObjectHideFlags: 0
@@ -1478,45 +1517,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!21 &1604995614
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: MPUI/Sprite Basic
-  m_Shader: {fileID: 4800000, guid: 0162a17359546d3479ae73858a9226ab, type: 3}
-  m_ShaderKeywords: CIRCLE OUTLINE PROCEDURAL_CUT
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - _ColorMask: 15
-    - _Height: 400
-    - _LineWeight: 4
-    - _PixelWorldScale: 999999
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    - _UseUIAlphaClip: 0
-    - _Width: 400
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Radius: {r: 0, g: 0, b: 0, a: 0}
-    - _TextureSize: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1727586642
 GameObject:
   m_ObjectHideFlags: 0
@@ -1589,7 +1589,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1780824971
 MonoBehaviour:
   m_ObjectHideFlags: 0
