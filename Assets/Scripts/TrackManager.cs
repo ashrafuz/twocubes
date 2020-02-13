@@ -33,7 +33,7 @@ public class TrackManager : SlowMono {
     private Camera m_MainCam;
 
     private void Awake () {
-        SetUpdateRateInSeconds (3);
+        SetUpdateRateInSeconds (2);
         ClearPath ();
         GenerateNewPath ();
         GenerateMesh ();
