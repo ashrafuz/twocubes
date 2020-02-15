@@ -21,13 +21,11 @@ public class Block : MonoBehaviour {
     }
 
     private void OnTriggerEnter (Collider other) {
-        // Debug.Log ("other " + other.transform.GetComponent<MeshRenderer> ().material.name);
-        // Debug.Log ("my mat " + m_MeshRend.material.name);
-
         if (string.Equals (other.transform.GetComponent<MeshRenderer> ().material.name, m_MeshRend.material.name)) {
             GameEventManager.OnRightCollide?.Invoke ();
         } else {
             GameEventManager.OnWrongCollide?.Invoke ();
         }
+        this.gameObject.SetActive (false);
     }
 }
