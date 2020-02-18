@@ -5387,12 +5387,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GameIsRunning: 0
   m_PathRingPoints: []
-  m_PoolThresholdDistance: 500
+  m_PoolThresholdDistance: 600
   m_MeshData: {fileID: 11400000, guid: 1f72c98ff8e2f2f4aa21d6c5dd123ffd, type: 2}
-  m_TotalCycle: 2
-  m_MeshDetailLevelPerCheckpoint: 32
-  m_MaxAmplitude: 24
-  m_PathSpan: 60
+  m_TotalCycle: 4
+  m_MeshDetailLevelPerCheckpoint: 40
+  m_MaxAmplitude: 20
+  m_PathSpan: 80
 --- !u!23 &734907927
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8904,7 +8904,7 @@ ParticleSystem:
     enabled: 1
     curve:
       serializedVersion: 2
-      minMaxState: 3
+      minMaxState: 1
       scalar: 0.8
       minScalar: 0.1
       maxCurve:
@@ -8957,7 +8957,7 @@ ParticleSystem:
         m_RotationOrder: 4
     y:
       serializedVersion: 2
-      minMaxState: 3
+      minMaxState: 1
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -9010,7 +9010,7 @@ ParticleSystem:
         m_RotationOrder: 4
     z:
       serializedVersion: 2
-      minMaxState: 3
+      minMaxState: 1
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -10825,7 +10825,7 @@ Camera:
   m_GameObject: {fileID: 1448883841}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -10935,9 +10935,9 @@ MonoBehaviour:
   - {fileID: 84137188}
   - {fileID: 1131807824}
   m_Track: {fileID: 734907926}
-  m_Speed: 8
+  m_Speed: 6.5
   m_RotSpeed: 5
-  m_DistanceFromTrack: 4.71
+  m_DistanceFromTrack: 5
 --- !u!4 &1727586644
 Transform:
   m_ObjectHideFlags: 0
