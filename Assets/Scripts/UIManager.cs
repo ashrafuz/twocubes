@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI m_PointsText;
     [SerializeField] private GameObject m_GameOverPanel;
     [SerializeField] private Button m_RestartButton;
+    [SerializeField] private Button m_ExitBtn;
 
     void Start () {
         GameEventManager.OnRightCollide += PointUp;
@@ -24,6 +25,11 @@ public class UIManager : MonoBehaviour {
         m_RestartButton.onClick.RemoveAllListeners ();
         m_RestartButton.onClick.AddListener (() => {
             SceneManager.LoadScene (0, LoadSceneMode.Single);
+        });
+
+        m_ExitBtn.onClick.RemoveAllListeners ();
+        m_ExitBtn.onClick.AddListener (() => {
+            Application.Quit ();
         });
     }
 

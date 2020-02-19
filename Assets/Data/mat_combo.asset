@@ -15,5 +15,3 @@ MonoBehaviour:
   m_ComboList:
   - m_BoxType: 0
     m_Material: {fileID: 2100000, guid: 14cf2590631f8324fa3ea283676a360b, type: 2}
-  - m_BoxType: 1
-    m_Material: {fileID: 2100000, guid: 6e122c109173a5f47934b84f765930f9, type: 2}
