@@ -22,9 +22,9 @@ public class Block : MonoBehaviour {
 
     private void OnTriggerEnter (Collider other) {
         if (string.Equals (other.transform.GetComponent<MeshRenderer> ().material.name, m_MeshRend.material.name)) {
-            GameEventManager.OnRightCollide?.Invoke ();
+            GameEventManager.OnRightCollide?.Invoke (transform.position);
         } else {
-            GameEventManager.OnWrongCollide?.Invoke ();
+            GameEventManager.OnWrongCollide?.Invoke (transform.position);
         }
         this.gameObject.SetActive (false);
     }

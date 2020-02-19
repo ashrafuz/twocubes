@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using AUZ_UTIL;
+using System;
 
 public class BoxController : SlowMono {
     [SerializeField] List<GameObject> m_BoxList = new List<GameObject> ();
@@ -10,6 +11,8 @@ public class BoxController : SlowMono {
     [SerializeField] float m_Speed = 2;
     [SerializeField] float m_RotSpeed = 3;
     [SerializeField] float m_DistanceFromTrack = 2;
+    [SerializeField] ParticleSystem m_WrongCollisionPS;
+    [SerializeField] ParticleSystem m_RightCollisionPS;
 
     private List<Vector2> m_PathPoints = new List<Vector2> ();
     private int m_CurrentPathIndex = 0;
@@ -34,6 +37,22 @@ public class BoxController : SlowMono {
         }
 
         GameEventManager.OnNewTrackGenerated += UpdatePathPoints;
+        GameEventManager.OnRightCollide += OnRightCollision;
+        GameEventManager.OnWrongCollide += OnWrongCollision;
+    }
+
+    private void OnWrongCollision (Vector3 _collidePos) {
+        m_WrongCollisionPS.gameObject.SetActive (true);
+        m_WrongCollisionPS.transform.position = _collidePos;
+        m_WrongCollisionPS.Stop ();
+        m_WrongCollisionPS.Play ();
+    }
+
+    private void OnRightCollision (Vector3 _collidePos) {
+        m_RightCollisionPS.gameObject.SetActive (true);
+        m_RightCollisionPS.transform.position = _collidePos;
+        m_RightCollisionPS.Stop ();
+        m_RightCollisionPS.Play ();
     }
 
     private List<Tween> runningTweens;

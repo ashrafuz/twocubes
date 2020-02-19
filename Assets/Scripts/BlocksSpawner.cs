@@ -22,7 +22,7 @@ public class BlocksSpawner : MonoBehaviour {
 
         for (int i = 0; i < m_InstantiatedBlocks.Count; i++) {
             //if camera passed my position, hide it
-            if (m_MainCam.transform.position.x - 50 > m_InstantiatedBlocks[i].transform.position.x) {
+            if (m_MainCam.transform.position.x - 100 > m_InstantiatedBlocks[i].transform.position.x) {
                 m_InstantiatedBlocks[i].gameObject.SetActive (false);
             }
         }
@@ -30,9 +30,9 @@ public class BlocksSpawner : MonoBehaviour {
         List<Vector2> pathPoints = m_Track.GetPathPoints ();
 
         int t = (int) (pathPoints.Count * 0.2f);
-        for (int i = t; i < pathPoints.Count - 10; i += 10) {
+        for (int i = pathPoints.Count - 20; i > t; i -= 20) {
             int random = Random.Range (0, 100);
-            if (random >= 50) {
+            if (random >= 40) {
                 Vector2 pointToSpawn = new Vector2 ();
                 float angleWithNextPoint = Vector2.SignedAngle (Vector2.right, (pathPoints[i + 1] - pathPoints[i]));
                 if (angleWithNextPoint < 0) {
@@ -61,8 +61,12 @@ public class BlocksSpawner : MonoBehaviour {
 
         newBlock.transform.SetParent (this.transform);
         newBlock.SetRandomType ();
+        newBlock.transform.position = _pos;
         newBlock.gameObject.SetActive (true);
 
-        m_InstantiatedBlocks.Add (newBlock);
+        if (idleBoxAvailableAt > -1) {
+            m_InstantiatedBlocks.Add (newBlock);
+        }
+
     }
 }

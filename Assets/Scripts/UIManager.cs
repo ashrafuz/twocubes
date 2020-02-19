@@ -33,20 +33,19 @@ public class UIManager : MonoBehaviour {
         });
     }
 
-    private void PointUp () {
+    private void PointUp (Vector3 _collidPos) {
         m_CurrentPoint += 10;
         m_PointsText.text = m_CurrentPoint.ToString ();
     }
 
-    private void PointDown () {
+    private void PointDown (Vector3 __collidPos) {
         m_CurrentLife--;
-        m_LifeText.text = m_CurrentLife.ToString ();
-
         if (m_CurrentLife <= 0) {
             m_CurrentLife = 0;
             m_GameOverPanel.gameObject.SetActive (true);
             GameEventManager.OnNoMoreLivesLeft?.Invoke ();
         }
+        m_LifeText.text = m_CurrentLife.ToString ();
     }
 
 }

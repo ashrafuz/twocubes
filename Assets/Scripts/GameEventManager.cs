@@ -5,8 +5,8 @@ using System;
 
 public class GameEventManager : MonoBehaviour {
     public static Action<int> OnNewTrackGenerated;
-    public static Action OnRightCollide;
-    public static Action OnWrongCollide;
+    public static Action<Vector3> OnRightCollide;
+    public static Action<Vector3> OnWrongCollide;
     public static Action OnNoMoreLivesLeft;
 
     private void Awake () {
