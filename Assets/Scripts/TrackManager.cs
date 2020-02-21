@@ -191,7 +191,7 @@ public class TrackManager : SlowMono {
         return randPoints;
     }
 
-    [MenuItem ("Tools/CreateNewMeshData")]
+    //[MenuItem ("Tools/CreateNewMeshData")]
     public static void CreateNewMeshData () {
         DataAsset meshData = ScriptableObject.CreateInstance<DataAsset> ();
 
@@ -233,7 +233,7 @@ public class TrackManager : SlowMono {
             File.Delete (GameConstants.MESH_DATA_FULL_PATH);
         }
 
-        AssetDatabase.CreateAsset (meshData, GameConstants.MESH_DATA_FULL_PATH);
+        //AssetDatabase.CreateAsset (meshData, GameConstants.MESH_DATA_FULL_PATH);
     }
 
 }
