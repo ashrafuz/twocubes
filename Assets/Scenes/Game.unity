@@ -10592,9 +10592,9 @@ MonoBehaviour:
   m_PoolThresholdDistance: 600
   m_MeshData: {fileID: 11400000, guid: 1f72c98ff8e2f2f4aa21d6c5dd123ffd, type: 2}
   m_TotalCycle: 4
-  m_MeshDetailLevelPerCheckpoint: 64
-  m_MaxAmplitude: 25
-  m_PathSpan: 100
+  m_MeshDetailLevelPerCheckpoint: 55
+  m_MaxAmplitude: 18
+  m_PathSpan: 64
 --- !u!23 &734907927
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -16771,8 +16771,8 @@ MonoBehaviour:
     type: 3}
   m_BlockSpawnDistance: 5
   m_ReferenceBox: {fileID: 84137188}
-  m_SpawnIntervalInPath: 20
-  m_SpawnPercentage: 60
+  m_SpawnIntervalInPath: 15
+  m_SpawnPercentage: 70
   m_InstantiatedBlocks: []
   m_HideDistanceThreshold: 20
 --- !u!4 &1804534716
